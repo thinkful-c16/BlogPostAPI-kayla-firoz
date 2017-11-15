@@ -28,6 +28,16 @@ app.post('/blog-posts', jsonParser, function(req, res){
   return res.status(201).json(post);
 });
 
+app.delete('/blog-posts/:id', (req, res) => {
+  BlogPosts.delete(req.params.id);
+  res.status(204).end();
+
+});
+
+
+
+
+
 app.listen(process.env.PORT || 8080, () => {
   console.log(`Your app is listening on port ${process.env.PORT || 8080}`);
 });
