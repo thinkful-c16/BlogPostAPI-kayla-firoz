@@ -1,20 +1,22 @@
 'use strict';
 
+
 const express = require('express');
 const bodyParser = require('body-parser');
-
 const {BlogPosts} = require('./model');
-
 const jsonParser = bodyParser.json();
 const app = express();
 
 BlogPosts.create('something', 'blah blah', 'kayla');
 BlogPosts.create('hello word', 'something about the universe', 'firoz');
 
+const blogRouter = require('./blogRouter');
 
-app.get('/blog-posts', function(req, res) {
-  res.json(BlogPosts.get());
-});
+app.use('/blog-posts', blogRouter);
+
+// app.get('/blog-posts', function(req, res) {
+//   res.json(BlogPosts.get());
+// });
 
 app.post('/blog-posts', jsonParser, function(req, res){
   const fields = ['title', 'content', 'author'];
@@ -46,7 +48,7 @@ app.put('/blog-posts/:id', jsonParser, (req, res) => {
   
   BlogPosts.update({id: req.params.id, title: req.body.title, content: req.body.content, author: req.body.author});  
   console.log(req.params); 
-    res.status(204).end();
+  res.status(204).end();
 });
 
 
