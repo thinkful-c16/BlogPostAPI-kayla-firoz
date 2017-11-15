@@ -20,7 +20,6 @@ app.post('/blog-posts', jsonParser, function(req, res){
   const fields = ['title', 'content', 'author'];
   for (let i=0; i < fields.length; i++) {
     if (!(fields[i] in req.body)) {
-      console.log(fields);
       return `Status ${res.status(400)} missing ${fields[i]}`;
     }
   }
@@ -31,7 +30,23 @@ app.post('/blog-posts', jsonParser, function(req, res){
 app.delete('/blog-posts/:id', (req, res) => {
   BlogPosts.delete(req.params.id);
   res.status(204).end();
+});
 
+app.put('/blog-posts/:id', jsonParser, (req, res) => {
+  const fields = ['title', 'content', 'author', 'id'];
+  for (let i = 0; i < fields.length; i++){
+    if (!(fields[i] in req.body )) {
+    
+      return `Error ${res.status(400)} missing ${fields[i]}`;
+    } else if (req.params.id !== req.body.id) {
+      return `Error ${res.status(400)} ${req.params.id} must match ${req.body.id}`;
+    } 
+ 
+  }
+  
+  BlogPosts.update({id: req.params.id, title: req.body.title, content: req.body.content, author: req.body.author});  
+  console.log(req.params); 
+    res.status(204).end();
 });
 
 
